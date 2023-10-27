@@ -1,0 +1,19 @@
+CREATE TABLE IF NOT EXISTS tests (
+    id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+    author_id INTEGER NOT NULL,
+    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    title TEXT NOT NULL,
+    description TEXT,
+    FOREIGN KEY (author_id) REFERENCES user (id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS user (
+    id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+    username TEXT UNIQUE NOT NULL
+);
+
+INSERT OR IGNORE INTO user (username) VALUES
+    ('WebLudus'), ('Dawid');
+
+INSERT OR IGNORE INTO tests (author_id, title, description) VALUES
+    (1, 'TEST_1', NULL), (2, 'TEST_2', ''), (2, 'TEST_3', 'DESC');

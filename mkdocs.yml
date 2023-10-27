@@ -1,0 +1,72 @@
+site_name: bepatient-db
+site_url: https://dawid-szaniawski.github.io/bepatient-db
+site_dir: site/docs
+site_author: Dawid Szaniawski
+site_description: A library facilitating work with asynchronous APIs
+repo_name: dawid-szaniawski/bepatient-db
+repo_url: https://github.com/dawid-szaniawski/bepatient-db
+
+theme:
+  name: material
+  favicon: assets/favicon.png
+  logo: assets/logo.png
+  icon:
+    repo: fontawesome/brands/github
+  features:
+    - navigation.expand
+    - navigation.path
+    - navigation.sections
+    - navigation.instant
+    - toc.integrate
+    - toc.follow
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: white
+      accent: deep orange
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: deep orange
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/dawid-szaniawski
+    - icon: fontawesome/brands/python
+      link: https://pypi.org/project/bepatient-db
+
+markdown_extensions:
+  - toc:
+      permalink: "#"
+      toc_depth: 4
+  - attr_list:
+  - admonition:
+  - tables:
+  - pymdownx.details:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.snippets:
+  - pymdownx.magiclink:
+  - pymdownx.inlinehilite:
+
+plugins:
+  - search:
+      separator: '[\s\-,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
+  - minify:
+      minify_html: true
+      minify_js: true
+      minify_css: true
+
+nav:
+  - Overview: index.md
+  - Usage: usage.md
+  - Checkers: checkers.md
+  - Comparers: comparers.md
+  - Roadmap: roadmap.md

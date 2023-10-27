@@ -1,0 +1,132 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bepatient-db"
+dynamic = ["version"]
+description = "Plugin for the 'bepatient' library adding database support."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "Dawid Szaniawski", email = "webluduspl@gmail.com" }]
+license = { file = "LICENSE" }
+dependencies = [
+    "bepatient>=0.5.1",
+    "dictor>=0.1.12",
+    "mysql-connector-python>=8.1.0",
+    "psycopg2-binary>=2.9.7"
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Web Environment",
+    "Intended Audience :: Developers",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development :: Testing",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: Utilities",
+    "Topic :: File Formats :: JSON",
+    "Topic :: File Formats :: JSON :: JSON Schema",
+    "Typing :: Typed",
+    "Topic :: Database",
+    "Topic :: Database :: Database Engines/Servers",
+    "Programming Language :: SQL"
+]
+keywords = [
+    "api",
+    "async",
+    "api_testing",
+    "automation",
+    "database",
+    "json",
+    "mySQL",
+    "postgreSQL",
+    "SQL",
+    "SQLite",
+    "testing",
+    "web"
+]
+
+[project.optional-dependencies]
+dev = [
+    "black>=23.7.0",
+    "flake8>=6.1.0",
+    "isort>=5.12.0",
+    "mypy>=1.4.1",
+    "pylint>=2.17.5",
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.11.1",
+    "ruff>=0.0.282",
+    "tox>=4.7.0",
+    "twine>=4.0.2"
+]
+docs = [
+    "mkdocs-material>=9.1.21",
+    "mkdocs-minify-plugin>=0.7.1"
+]
+
+[project.urls]
+Source = "https://github.com/dawid-szaniawski/bepatient-db"
+Documentation = "https://webludus.pages.dev/"
+
+[tool.setuptools]
+include-package-data = false
+
+[tool.setuptools.dynamic]
+version = {attr = "bepatient_db.__version__"}
+
+[tool.setuptools.packages.find]
+include = ["bepatient_db*"]
+exclude = ["docs*", "tests*"]
+namespaces = false
+
+[tool.pytest.ini_options]
+addopts = "--durations=2"
+log_cli = true
+log_cli_level = "debug"
+markers = "e2e: end-to-end tests"
+
+[tool.black]
+line-length = 88
+target-version = ['py310']
+
+[tool.isort]
+profile = "black"
+line_length = 88
+src_paths= ["bepatient_db","test"]
+
+[tool.ruff]
+line-length = 88
+
+[tool.mypy]
+exclude = "venv"
+check_untyped_defs = true
+disallow_any_generics = true
+ignore_missing_imports = true
+no_implicit_optional = true
+show_error_codes = true
+strict_equality = true
+warn_redundant_casts = true
+warn_unreachable = true
+warn_unused_configs = true
+no_implicit_reexport = true
+
+[tool.pylint.'MESSAGES CONTROL']
+max-line-length = 88
+disable = [
+    "too-few-public-methods",
+    "too-many-arguments",
+    "missing-module-docstring",
+    "missing-class-docstring",
+    "missing-function-docstring",
+    "protected-access"
+]
