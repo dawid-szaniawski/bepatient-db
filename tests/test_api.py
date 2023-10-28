@@ -144,6 +144,11 @@ class TestSQLWaiter:
                 "Checking whether the condition has been met. The 1 approach",
             ),
             (
+                "bepatient_db.sql_executor",
+                20,
+                "Query send to database: SELECT username FROM user WHERE id = 3",
+            ),
+            (
                 "bepatient.waiter_src.checker",
                 20,
                 "Check uuid: SQLWaiter | Checker: SQLChecker | Comparer: is_equal | "
@@ -166,6 +171,11 @@ class TestSQLWaiter:
                 "bepatient.waiter_src.waiter",
                 10,
                 "Checking whether the condition has been met. The 2 approach",
+            ),
+            (
+                "bepatient_db.sql_executor",
+                20,
+                "Query send to database: SELECT username FROM user WHERE id = 3",
             ),
             (
                 "bepatient.waiter_src.checker",
