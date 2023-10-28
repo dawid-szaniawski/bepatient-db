@@ -55,7 +55,7 @@ def get_db():
             current_app.config['DATABASE'],
             detect_types=sqlite3.PARSE_DECLTYPES
         )
-        g.db.row_factory = sqlite3.Row
+        g.db.row_factory = dict_factory
 
     return g.db
 

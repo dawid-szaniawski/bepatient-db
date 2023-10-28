@@ -1,14 +1,11 @@
-import sqlite3
 from typing import Any
 
 from bepatient import Checker
 from bepatient.waiter_src.comparators import COMP_DICT, COMPARATORS
 from bepatient.waiter_src.waiter import wait_for_executor
-from mysql.connector.cursor import CursorBase as MySqlCursor
-from psycopg2.extensions import cursor as Psycopg2Cursor
 
 from .sql_checkers import ResultType, SQLChecker
-from .sql_executor import SQLExecutor
+from .sql_executor import DbCursor, SQLExecutor
 
 
 class SQLWaiter:
@@ -30,7 +27,7 @@ class SQLWaiter:
 
         # Add a response checker
         waiter.add_checker(
-            expected_value=10, comparer=COMPARATORS.EQUALS, dict_path="user_count"
+            expected_value=10, comparer="is_equal", dict_path="user_count"
         )
 
         # Run the waiter
@@ -39,9 +36,8 @@ class SQLWaiter:
         # Get the final response
         result = waiter.get_result()
         ```"""
-    def __init__(
-        self, cursor: sqlite3.Cursor | Psycopg2Cursor | MySqlCursor, query: str
-    ):
+
+    def __init__(self, cursor: DbCursor, query: str):
         self.executor = SQLExecutor(db_cursor=cursor, query=query)
 
     def add_checker(

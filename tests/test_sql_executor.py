@@ -1,6 +1,7 @@
 from sqlite3 import Cursor
 
 import pytest
+from _pytest.logging import LogCaptureFixture
 from bepatient.waiter_src.checker import Checker
 from bepatient.waiter_src.exceptions.executor_exceptions import ExecutorIsNotReady
 
@@ -13,12 +14,21 @@ class TestSQLExecutor:
         sqlite_db: Cursor,
         select_all_from_user_query: str,
         checker_true: Checker,
+        caplog: LogCaptureFixture,
     ):
+        logs = [
+            (
+                "bepatient_db.sql_executor",
+                20,
+                "Query send to database: SELECT * from user",
+            )
+        ]
         executor = SQLExecutor(
             db_cursor=sqlite_db, query=select_all_from_user_query
         ).add_checker(checker_true)
 
         assert executor.is_condition_met() is True
+        assert caplog.record_tuples == logs
 
     def test_is_condition_met_returns_true_when_all_checkers_pass(
         self,

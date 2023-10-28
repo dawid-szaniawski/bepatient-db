@@ -5,7 +5,8 @@ from bepatient.waiter_src.checker import Checker
 from dictor import dictor
 
 log = logging.getLogger(__name__)
-DbValueType: TypeAlias = str | int | float | None
+
+DbValueType: TypeAlias = str | int | float | None | bool
 DbData: TypeAlias = dict[str, DbValueType] | DbValueType
 ResultType: TypeAlias = DbData | list[DbData]
 

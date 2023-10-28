@@ -76,7 +76,6 @@ docs = [
 
 [project.urls]
 Source = "https://github.com/dawid-szaniawski/bepatient-db"
-Documentation = "https://webludus.pages.dev/"
 
 [tool.setuptools]
 include-package-data = false
@@ -86,14 +85,13 @@ version = {attr = "bepatient_db.__version__"}
 
 [tool.setuptools.packages.find]
 include = ["bepatient_db*"]
-exclude = ["docs*", "tests*"]
+exclude = ["tests*"]
 namespaces = false
 
 [tool.pytest.ini_options]
 addopts = "--durations=2"
 log_cli = true
 log_cli_level = "debug"
-markers = "e2e: end-to-end tests"
 
 [tool.black]
 line-length = 88

@@ -1,3 +1,4 @@
+import logging
 import sqlite3
 from typing import TypeAlias
 
@@ -5,6 +6,7 @@ from bepatient.waiter_src.executor import Executor
 from mysql.connector.cursor import CursorBase
 from psycopg2.extensions import cursor
 
+log = logging.getLogger(__name__)
 
 DbCursor: TypeAlias = sqlite3.Cursor | CursorBase | cursor
 
@@ -19,12 +21,9 @@ class SQLExecutor(Executor):
 
     Note:
         The cursor object provided should have a cursor factory that returns
-            dictionaries."""
+             dict object."""
 
-    def __init__(
-        self, db_cursor: DbCursor, query: str
-    ):
-        """Cursor should have cursor_factory that returns dict object"""
+    def __init__(self, db_cursor: DbCursor, query: str):
         super().__init__()
         self._cursor = db_cursor
         self._input: str = query
@@ -34,6 +33,7 @@ class SQLExecutor(Executor):
 
         Returns:
             bool: True if the condition has been met, False otherwise."""
+        log.info("Query send to database: %s", self._input)
         self._result = self._cursor.execute(self._input).fetchall()
 
         self._failed_checkers = [
