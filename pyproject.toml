@@ -26,6 +26,7 @@ classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: Implementation :: CPython",
     "Topic :: Internet :: WWW/HTTP",
@@ -95,12 +96,12 @@ log_cli_level = "debug"
 
 [tool.black]
 line-length = 88
-target-version = ['py310']
+target-version = ['py312']
 
 [tool.isort]
 profile = "black"
 line_length = 88
-src_paths= ["bepatient_db","test"]
+src_paths= ["bepatient_db", "test"]
 
 [tool.ruff]
 line-length = 88
