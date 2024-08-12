@@ -119,7 +119,7 @@ class TestSQLWaiter:
 
         assert waiter.get_result() == result
 
-    def test_wait_for_value(
+    def test_wait_for_value_sqlite(
         self,
         sqlite_db: sqlite3.Cursor,
         tmp_path: Path,
@@ -140,7 +140,7 @@ class TestSQLWaiter:
         logs = [
             (
                 "bepatient.waiter_src.waiter",
-                10,
+                20,
                 "Checking whether the condition has been met. The 1 approach",
             ),
             (
@@ -149,27 +149,28 @@ class TestSQLWaiter:
                 "Query send to database: SELECT username FROM user WHERE id = 3",
             ),
             (
-                "bepatient.waiter_src.checker",
-                20,
-                "Check uuid: SQLWaiter | Checker: SQLChecker | Comparer: is_equal | "
-                "Dictor_fallback: None | Expected_value: Jerry | Path: 0.username | "
-                "Search_query: None | Data: Jerry",
+                "bepatient.waiter_src.checkers.checker",
+                10,
+                "Check uuid: SQLWaiter | Checker: SQLChecker | Comparer: is_equal"
+                " | Dictor_fallback: None | Expected_value: Jerry | Path: 0.username"
+                " | Search_query: None | Data: Jerry",
             ),
             ("bepatient_db.sql_checkers", 20, "Check uuid: SQLWaiter | Data: []"),
             (
-                "bepatient.waiter_src.checker",
-                10,
-                "Check uuid: SQLWaiter | Condition not met | Expected: Jerry"
-                " | Data: None",
+                "bepatient.waiter_src.checkers.checker",
+                20,
+                "Check uuid: SQLWaiter | Condition not met | Checker: SQLChecker"
+                " | Comparer: is_equal | Dictor_fallback: None | Expected_value: Jerry"
+                " | Path: 0.username | Search_query: None | Data: Jerry",
             ),
             (
                 "bepatient.waiter_src.waiter",
-                10,
-                "The condition has not been met. Waiting: 2",
+                20,
+                "The condition has not been met. Waiting time: 2",
             ),
             (
                 "bepatient.waiter_src.waiter",
-                10,
+                20,
                 "Checking whether the condition has been met. The 2 approach",
             ),
             (
@@ -178,18 +179,25 @@ class TestSQLWaiter:
                 "Query send to database: SELECT username FROM user WHERE id = 3",
             ),
             (
-                "bepatient.waiter_src.checker",
-                20,
-                "Check uuid: SQLWaiter | Checker: SQLChecker | Comparer: is_equal | "
-                "Dictor_fallback: None | Expected_value: Jerry | Path: 0.username | "
-                "Search_query: None | Data: Jerry",
+                "bepatient.waiter_src.checkers.checker",
+                10,
+                "Check uuid: SQLWaiter | Checker: SQLChecker | Comparer: is_equal"
+                " | Dictor_fallback: None | Expected_value: Jerry | Path: 0.username"
+                " | Search_query: None | Data: Jerry",
             ),
             (
                 "bepatient_db.sql_checkers",
                 20,
                 "Check uuid: SQLWaiter | Data: [{'username': 'Jerry'}]",
             ),
-            ("bepatient.waiter_src.waiter", 10, "Condition met!"),
+            (
+                "bepatient.waiter_src.checkers.checker",
+                20,
+                "Check success! | uuid: SQLWaiter | Checker: SQLChecker"
+                " | Comparer: is_equal | Dictor_fallback: None | Expected_value: Jerry"
+                " | Path: 0.username | Search_query: None | Data: Jerry",
+            ),
+            ("bepatient.waiter_src.waiter", 20, "Condition met!"),
         ]
 
         waiter = SQLWaiter(

@@ -29,7 +29,7 @@ def checker_true(
         def prepare_data(self, data: Any, run_uuid: str | None = None) -> None:
             """mock"""
 
-        def check(self, data: Any) -> bool:
+        def check(self, data: Any, run_uuid: str) -> bool:
             return True
 
     checker = CheckerMocker(is_equal, "")
@@ -48,7 +48,7 @@ def checker_false(
         def prepare_data(self, data: Any, run_uuid: str | None = None) -> None:
             """mock"""
 
-        def check(self, data: Any) -> bool:
+        def check(self, data: Any, run_uuid: str) -> bool:
             return False
 
     return CheckerMocker(is_equal, "")

@@ -1,7 +1,7 @@
 from typing import Any
 
 from bepatient import Checker
-from bepatient.waiter_src.comparators import COMP_DICT, COMPARATORS
+from bepatient.waiter_src import comparators
 from bepatient.waiter_src.waiter import wait_for_executor
 
 from .sql_checkers import ResultType, SQLChecker
@@ -43,7 +43,7 @@ class SQLWaiter:
     def add_checker(
         self,
         expected_value: Any,
-        comparer: COMPARATORS,
+        comparer: comparators.COMPARATORS,
         dict_path: str | None = None,
         search_query: str | None = None,
     ):
@@ -62,7 +62,7 @@ class SQLWaiter:
             self: updated RequestsWaiter instance."""
         self.executor.add_checker(
             SQLChecker(
-                comparer=COMP_DICT[comparer],
+                comparer=getattr(comparators, comparer),
                 expected_value=expected_value,
                 dict_path=dict_path,
                 search_query=search_query,

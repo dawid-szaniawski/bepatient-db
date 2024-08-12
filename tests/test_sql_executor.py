@@ -2,7 +2,7 @@ from sqlite3 import Cursor
 
 import pytest
 from _pytest.logging import LogCaptureFixture
-from bepatient.waiter_src.checker import Checker
+from bepatient.waiter_src.checkers.checker import Checker
 from bepatient.waiter_src.exceptions.executor_exceptions import ExecutorIsNotReady
 
 from bepatient_db.sql_executor import SQLExecutor
