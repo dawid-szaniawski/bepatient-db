@@ -1,7 +1,7 @@
 import logging
 from typing import Any, Callable, TypeAlias
 
-from bepatient.waiter_src.checker import Checker
+from bepatient import Checker
 from dictor import dictor
 
 log = logging.getLogger(__name__)

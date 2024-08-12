@@ -11,8 +11,8 @@ class TestSQLChecker:
     def test_str(self, is_equal: Callable[[Any, Any], bool]):
         checker = SQLChecker(is_equal, 5)
         msg = (
-            "Checker: SQLChecker | Comparer: comparer | Dictor_fallback: None | "
-            "Expected_value: 5 | Path: None | Search_query: None | Data: None"
+            "Checker: SQLChecker | Comparer: comparer | Dictor_fallback: None"
+            " | Expected_value: 5 | Path: None | Search_query: None | Data: None"
         )
 
         assert str(checker) == msg
@@ -76,7 +76,7 @@ class TestSQLChecker:
         checker = SQLChecker(is_equal, [{"id": 1, "username": "WebLudus"}])
         checker_data = sqlite_db.execute("SELECT * FROM user WHERE id = 1").fetchall()
 
-        assert checker.check(checker_data) is True
+        assert checker.check(checker_data, "TEST") is True
 
     def test_condition_not_met(
         self,
@@ -87,7 +87,7 @@ class TestSQLChecker:
         checker = SQLChecker(is_equal, "TEST")
         checker_data = sqlite_db.execute(select_all_from_user_query).fetchall()
 
-        assert checker.check(checker_data) is False
+        assert checker.check(checker_data, "TEST") is False
 
     def test_missing_key(
         self,
@@ -103,7 +103,7 @@ class TestSQLChecker:
         )
         checker_data = sqlite_db.execute(select_all_from_user_query).fetchall()
 
-        assert checker.check(checker_data) is True
+        assert checker.check(checker_data, "TEST") is True
 
     def test_missing_key_in_search_query(
         self,
@@ -119,28 +119,33 @@ class TestSQLChecker:
         )
         checker_data = sqlite_db.execute(select_all_from_user_query).fetchall()
 
-        assert checker.check(checker_data) is True
+        assert checker.check(checker_data, "TEST") is True
 
     def test_null_value(
         self,
         sqlite_db: sqlite3.Cursor,
         is_equal: Callable[[Any, Any], bool],
         caplog: LogCaptureFixture,
-        monkeypatch: pytest.MonkeyPatch,
     ):
-        monkeypatch.setattr("uuid.uuid4", lambda: "TestSQLChecker")
         logs = [
             (
-                "bepatient.waiter_src.checker",
-                20,
-                "Check uuid: TestSQLChecker | Checker: SQLChecker | Comparer: comparer"
+                "bepatient.waiter_src.checkers.checker",
+                10,
+                "Check uuid: TEST | Checker: SQLChecker | Comparer: comparer"
                 " | Dictor_fallback: missing | Expected_value: None"
                 " | Path: 0.description | Search_query: None | Data: None",
             ),
             (
                 "bepatient_db.sql_checkers",
                 20,
-                "Check uuid: TestSQLChecker | Data: [{'description': None}]",
+                "Check uuid: TEST | Data: [{'description': None}]",
+            ),
+            (
+                "bepatient.waiter_src.checkers.checker",
+                20,
+                "Check success! | uuid: TEST | Checker: SQLChecker | Comparer: comparer"
+                " | Dictor_fallback: missing | Expected_value: None"
+                " | Path: 0.description | Search_query: None | Data: None",
             ),
         ]
         checker = SQLChecker(
@@ -153,7 +158,7 @@ class TestSQLChecker:
             "SELECT description from tests WHERE id = 1"
         ).fetchall()
 
-        assert checker.check(checker_data) is True
+        assert checker.check(checker_data, "TEST") is True
         assert caplog.record_tuples == logs
 
     def test_empty_string_value(
@@ -161,21 +166,26 @@ class TestSQLChecker:
         sqlite_db: sqlite3.Cursor,
         is_equal: Callable[[Any, Any], bool],
         caplog: LogCaptureFixture,
-        monkeypatch: pytest.MonkeyPatch,
     ):
-        monkeypatch.setattr("uuid.uuid4", lambda: "TestSQLChecker")
         logs = [
             (
-                "bepatient.waiter_src.checker",
-                20,
-                "Check uuid: TestSQLChecker | Checker: SQLChecker | Comparer: comparer"
-                " | Dictor_fallback: missing | Expected_value: "
-                " | Path: 0.description | Search_query: None | Data: ",
+                "bepatient.waiter_src.checkers.checker",
+                10,
+                "Check uuid: TEST | Checker: SQLChecker | Comparer: comparer"
+                " | Dictor_fallback: missing | Expected_value:  | Path: 0.description"
+                " | Search_query: None | Data: ",
             ),
             (
                 "bepatient_db.sql_checkers",
                 20,
-                "Check uuid: TestSQLChecker | Data: [{'description': ''}]",
+                "Check uuid: TEST | Data: [{'description': ''}]",
+            ),
+            (
+                "bepatient.waiter_src.checkers.checker",
+                20,
+                "Check success! | uuid: TEST | Checker: SQLChecker | Comparer: comparer"
+                " | Dictor_fallback: missing | Expected_value:  | Path: 0.description"
+                " | Search_query: None | Data: ",
             ),
         ]
         checker = SQLChecker(
@@ -188,7 +198,7 @@ class TestSQLChecker:
             "SELECT description from tests WHERE id = 2"
         ).fetchall()
 
-        assert checker.check(checker_data) is True
+        assert checker.check(checker_data, "TEST") is True
         assert caplog.record_tuples == logs
 
     @pytest.mark.xfail(reason="The dictor library bug")
@@ -196,9 +206,7 @@ class TestSQLChecker:
         self,
         sqlite_db: sqlite3.Cursor,
         is_equal: Callable[[Any, Any], bool],
-        monkeypatch: pytest.MonkeyPatch,
     ):
-        monkeypatch.setattr("uuid.uuid4", lambda: "TestSQLChecker")
         checker = SQLChecker(
             comparer=is_equal,
             expected_value=[None],
@@ -209,28 +217,33 @@ class TestSQLChecker:
             "SELECT description from tests WHERE id = 1"
         ).fetchall()
 
-        assert checker.check(checker_data) is True
+        assert checker.check(checker_data, "TEST") is True
 
     def test_search_for_empty_string_value(
         self,
         sqlite_db: sqlite3.Cursor,
         is_equal: Callable[[Any, Any], bool],
         caplog: LogCaptureFixture,
-        monkeypatch: pytest.MonkeyPatch,
     ):
-        monkeypatch.setattr("uuid.uuid4", lambda: "TestSQLChecker")
         logs = [
             (
-                "bepatient.waiter_src.checker",
-                20,
-                "Check uuid: TestSQLChecker | Checker: SQLChecker | Comparer: comparer"
+                "bepatient.waiter_src.checkers.checker",
+                10,
+                "Check uuid: TEST | Checker: SQLChecker | Comparer: comparer"
                 " | Dictor_fallback: missing | Expected_value: [''] | Path: None"
                 " | Search_query: description | Data: ['']",
             ),
             (
                 "bepatient_db.sql_checkers",
                 20,
-                "Check uuid: TestSQLChecker | Data: [{'description': ''}]",
+                "Check uuid: TEST | Data: [{'description': ''}]",
+            ),
+            (
+                "bepatient.waiter_src.checkers.checker",
+                20,
+                "Check success! | uuid: TEST | Checker: SQLChecker | Comparer: comparer"
+                " | Dictor_fallback: missing | Expected_value: [''] | Path: None"
+                " | Search_query: description | Data: ['']",
             ),
         ]
         checker = SQLChecker(
@@ -243,5 +256,5 @@ class TestSQLChecker:
             "SELECT description from tests WHERE id = 2"
         ).fetchall()
 
-        assert checker.check(checker_data) is True
+        assert checker.check(checker_data, "TEST") is True
         assert caplog.record_tuples == logs

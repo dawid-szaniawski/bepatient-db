@@ -1,8 +1,9 @@
 import logging
 import sqlite3
+import uuid
 from typing import TypeAlias
 
-from bepatient.waiter_src.executor import Executor
+from bepatient.waiter_src.executors.executor import Executor
 from mysql.connector.cursor import CursorBase
 from psycopg2.extensions import cursor
 
@@ -34,10 +35,13 @@ class SQLExecutor(Executor):
         Returns:
             bool: True if the condition has been met, False otherwise."""
         log.info("Query send to database: %s", self._input)
+        run_uuid: str = str(uuid.uuid4())
         self._result = self._cursor.execute(self._input).fetchall()
 
         self._failed_checkers = [
-            checker for checker in self._checkers if not checker.check(self._result)
+            checker
+            for checker in self._checkers
+            if not checker.check(self._result, run_uuid)
         ]
 
         if len(self._failed_checkers) == 0:
